@@ -6,6 +6,7 @@ const UserModel = radioSequelize.define(
   "Profiles",
   {
     userId: {
+      primaryKey: true,
       type: DataTypes.INTEGER,
       allowNull: false,
     },

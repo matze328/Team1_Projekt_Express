@@ -63,7 +63,7 @@ RadioRouter.get("/byuserid", (req, res) => {
 });
 
 RadioRouter.get("/all", (req, res) => {
-  res.status(StatusCodes.OK).send(todos);
+  res.status(StatusCodes.OK).send(radios);
 });
 
 // PUT REQUESTS

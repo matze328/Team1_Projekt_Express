@@ -6,6 +6,7 @@ const RadioModel = radioSequelize.define(
   "Radios",
   {
     userId: {
+      primaryKey: true,
       type: DataTypes.INTEGER,
       allowNull: false,
     },
