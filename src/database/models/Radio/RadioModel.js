@@ -1,9 +1,9 @@
 const { DataTypes } = require("sequelize");
-const todoSequelize = require("../setup/database");
+const radioSequelize = require("../../setup/database");
 
 // Define the Todo model
-const TodoModel = todoSequelize.define(
-  "Todo",
+const RadioModel = radioSequelize.define(
+  "Radios",
   {
     userId: {
       type: DataTypes.INTEGER,
@@ -13,9 +13,8 @@ const TodoModel = todoSequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-
   },
   { tableName: "RadioSender" }
 );
 
-module.exports = TodoModel;
+module.exports = RadioModel;

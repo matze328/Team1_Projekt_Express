@@ -1,11 +1,11 @@
 const { Router } = require("express");
 const { StatusCodes, ReasonPhrases } = require("http-status-codes");
-const todoSequelize = require("../../database/setup/database");
-const TodoModel = require("../../database/models/TodoModel");
+const radioSequelize = require("../../database/setup/database");
+const RadioModel = require("../../database/models/Radio/RadioModel");
 
 const RadioRouter = Router();
 
-let todos = [
+let radios = [
   {
     id: 1,
     userId: 1,
@@ -31,12 +31,12 @@ let todos = [
 // GET REQUESTS
 // /v1/todos/bytodoid
 RadioRouter.get("/byid", (req, res) => {
-  const todoId = req.query.todoId;
-  if (!todoId) {
+  const radioId = req.query.radioId;
+  if (!radioId) {
     res.status(StatusCodes.BAD_REQUEST).send(ReasonPhrases.BAD_REQUEST);
     return;
   }
-  const todo = todos.find((item) => item.id == todoId);
+  const todo = radios.find((item) => item.id == radioId);
   // 1 == '1' --> true
   // 1 === '1' --> false
   res.status(StatusCodes.OK).json({ todo: todo });
@@ -120,7 +120,7 @@ RadioRouter.post("/create", async (req, res) => {
     userId: newUserId,
   };
 
-  const todo = await TodoModel.create(newTodo);
+  const todo = await RadioModel.create(newTodo);
 
   // todos.push(newTodo);
 

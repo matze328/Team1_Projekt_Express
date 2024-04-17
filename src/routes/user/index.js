@@ -1,7 +1,13 @@
 const { Router } = require("express");
 const { StatusCodes, ReasonPhrases } = require("http-status-codes");
-
+const radioSequelize = require("../../database/setup/database");
+const UserModel = require("../../database/models/User/UserModel.js");
 // Datenbank simulieren
+
+
+
+const UserRouter = Router();
+
 let profiles = [
   {
     userId: 1,
@@ -37,7 +43,7 @@ let profiles = [
   },
 ];
 
-const UserRouter = Router();
+
 
 //  ***GET REQUESTS***
 //Return all profiles
