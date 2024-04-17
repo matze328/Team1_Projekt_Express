@@ -3,42 +3,34 @@ const { StatusCodes, ReasonPhrases } = require("http-status-codes");
 const todoSequelize = require("../../database/setup/database");
 const TodoModel = require("../../database/models/TodoModel");
 
-const TodosRouter = Router();
+const RadioRouter = Router();
 
 let todos = [
   {
     id: 1,
     userId: 1,
-    task: "Wäsche waschen",
-    isDone: true,
-    dueDate: new Date("2024-03-03"),
+    radioSender: "Last FM",
   },
   {
     id: 2,
     userId: 1,
-    task: "Müll rausbrigen",
-    isDone: false,
-    dueDate: new Date("2024-03-03"),
+    radioSender: "Sunshine Live",
   },
   {
     id: 3,
     userId: 2,
-    task: "Tanzen",
-    isDone: false,
-    dueDate: new Date("2024-03-03"),
+    radioSender: "1 Live",
   },
   {
     id: 4,
     userId: 2,
-    task: "Auto fahren",
-    isDone: true,
-    dueDate: new Date("2024-03-03"),
+    radioSender: "Radio 91,10",
   },
 ];
 
 // GET REQUESTS
 // /v1/todos/bytodoid
-TodosRouter.get("/byid", (req, res) => {
+RadioRouter.get("/byid", (req, res) => {
   const todoId = req.query.todoId;
   if (!todoId) {
     res.status(StatusCodes.BAD_REQUEST).send(ReasonPhrases.BAD_REQUEST);
@@ -51,7 +43,7 @@ TodosRouter.get("/byid", (req, res) => {
 });
 
 // Alle Todos von einer UserId
-TodosRouter.get("/byuserid", (req, res) => {
+RadioRouter.get("/byuserid", (req, res) => {
   // const userId = req.body.userId;
   // const userId = parseInt(req.query.userId);
   const userId = req.query.userId;
@@ -70,12 +62,12 @@ TodosRouter.get("/byuserid", (req, res) => {
   // res.status(StatusCodes.OK).send(JSON.stringify(userTodos)); //alternativ
 });
 
-TodosRouter.get("/all", (req, res) => {
+RadioRouter.get("/all", (req, res) => {
   res.status(StatusCodes.OK).send(todos);
 });
 
 // PUT REQUESTS
-TodosRouter.put("/mark", (req, res) => {
+RadioRouter.put("/mark", (req, res) => {
   const { id, newIsDone } = req.body;
 
   const todo = todos.find((item) => item.id == id);
@@ -94,7 +86,7 @@ TodosRouter.put("/mark", (req, res) => {
   res.status(StatusCodes.OK).json({ updatedTodo: todo });
 });
 
-TodosRouter.put("/update", (req, res) => {
+RadioRouter.put("/update", (req, res) => {
   const { todoId, newTask, newIsDone, newDueDate } = req.body;
 
   const todo = todos.find((todo) => todo.id == todoId);
@@ -118,7 +110,7 @@ TodosRouter.put("/update", (req, res) => {
 });
 
 // POST REQUESTS
-TodosRouter.post("/create", async (req, res) => {
+RadioRouter.post("/create", async (req, res) => {
   const { newTask, newIsDone, newDueDate, newUserId } = req.body;
 
   const newTodo = {
@@ -136,7 +128,7 @@ TodosRouter.post("/create", async (req, res) => {
 });
 
 // DELETE REQUEST
-TodosRouter.delete("/delete", (req, res) => {
+RadioRouter.delete("/delete", (req, res) => {
   const { todoId } = req.body; //req.body.todoId
 
   console.log("MY BODY", req.body);
@@ -147,4 +139,4 @@ TodosRouter.delete("/delete", (req, res) => {
   res.status(StatusCodes.OK).json({ deletedTodosId: todoId });
 });
 
-module.exports = { TodosRouter };
+module.exports = { RadioRouter };

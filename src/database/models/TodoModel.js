@@ -9,21 +9,13 @@ const TodoModel = todoSequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    task: {
+    radioSender: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    isDone: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
-    },
-    dueDate: {
-      type: DataTypes.DATE,
-      allowNull: false,
-    },
+
   },
-  { tableName: "Todos" }
+  { tableName: "RadioSender" }
 );
 
 module.exports = TodoModel;

@@ -4,17 +4,36 @@ const { StatusCodes, ReasonPhrases } = require("http-status-codes");
 // Datenbank simulieren
 let profiles = [
   {
-    id: 1,
-    firstName: "Max",
-    username: "julihihi",
-    name: "Mustermann",
-    birthDate: new Date("1990-10-10"),
+    userId: 1,
+    userName:"jane",
+    vorName: "Max",
+    nachName: "julihihi",
+    email: "Mustermann@aol.com",
+    password: "testing",
   },
   {
-    id: 2,
-    firstName: "Nina",
-    name: "Mustermann",
-    birthDate: new Date("1980-10-10"),
+    userId: 2,
+    userName:"joe",
+    vorName: "joe",
+    nachName: "Dosermann",
+    email: "joeDosermann@aol.com",
+    password: "tasting",
+  },
+  {
+    userId: 3,
+    userName:"bob",
+    vorName: "Boby",
+    nachName: "Lando",
+    email: "Boby.Lando@aol.com",
+    password: "teasting",
+  },
+  {
+    userId:  4,
+    userName:"bean",
+    vorName: "Bär",
+    nachName: "Mann",
+    email: "Bär.Mann@aol.com",
+    password: "toasting",
   },
 ];
 
@@ -27,14 +46,14 @@ UserRouter.get("/profile/all", (req, res) => {
 });
 
 // Return profile from a specific user
-UserRouter.get("/profile", (req, res) => {
+UserRouter.get("/profile/byid", (req, res) => {
   const userId = parseInt(req.query.userId);
   if (!userId) {
     res.status(StatusCodes.BAD_REQUEST).send(ReasonPhrases.BAD_REQUEST);
     return;
   }
-  const userProfile = profiles.find((profile) => profile.id === userId);
-  res.status(StatusCodes.OK).json({ profile: userProfile });
+  const userProfile = profiles.find((profiles) => profiles.userId === userId);
+  res.status(StatusCodes.OK).json({ profiles: userProfile });
 });
 
 //  ***PUT REQUESTS***
