@@ -73,15 +73,15 @@ UserRouter.put("/profile/update", (req, res) => {
   // const userId = req.body.userId;
 
   // wir holen Input aus dem Request heraus
-  const { username, userId } = req.body;
+  const { userName, userId } = req.body;
 
-  if (!userId || !username) {
+  if (!userId || !userName) {
     res.status(StatusCodes.BAD_REQUEST).send("userID oder username fehlt");
   } else {
     // finde das Profil mit passender ID
     const currentUser = profiles.find((item) => item.id === userId);
     // aktualisiere Profil-username
-    currentUser.username = username;
+    currentUser.userName = userName;
 
     // hole alle anderen Profile aus der Datenbank
     const newProfiles = profiles.filter((item) => item.id !== userId);

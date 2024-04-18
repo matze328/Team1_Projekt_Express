@@ -10,36 +10,40 @@ let radios = [
     id: 1,
     userId: 1,
     radioSender: "Last FM",
+    isDone : true,
   },
   {
     id: 2,
     userId: 1,
     radioSender: "Sunshine Live",
+    isDone: true,
   },
   {
     id: 3,
     userId: 2,
     radioSender: "1 Live",
+    isDone: true,
   },
   {
     id: 4,
     userId: 2,
     radioSender: "Radio 91,10",
+    isDone: true,
   },
 ];
 
 // GET REQUESTS
 // /v1/todos/bytodoid
 RadioRouter.get("/byid", (req, res) => {
-  const radioId = req.query.radioId;
+  const radioId = req.query.id;
   if (!radioId) {
     res.status(StatusCodes.BAD_REQUEST).send(ReasonPhrases.BAD_REQUEST);
     return;
   }
-  const todo = radios.find((item) => item.id == radioId);
+  const Radio = radios.find((item) => item.id == radioId);
   // 1 == '1' --> true
   // 1 === '1' --> false
-  res.status(StatusCodes.OK).json({ todo: todo });
+  res.status(StatusCodes.OK).json({ Radio: Radio });
 });
 
 // Alle Todos von einer UserId
@@ -47,7 +51,7 @@ RadioRouter.get("/byuserid", (req, res) => {
   // const userId = req.body.userId;
   // const userId = parseInt(req.query.userId);
   const userId = req.query.userId;
-  console.log(userId);
+  // console.log(userId);
 
   if (!userId) {
     res
@@ -56,9 +60,9 @@ RadioRouter.get("/byuserid", (req, res) => {
     return;
   }
 
-  const userTodos = todos.filter((todo) => todo.userId == userId);
+  const userRadio = radios.filter((item) => item.userId == userId);
 
-  res.status(StatusCodes.OK).json(userTodos);
+  res.status(StatusCodes.OK).json(userRadio);
   // res.status(StatusCodes.OK).send(JSON.stringify(userTodos)); //alternativ
 });
 
@@ -70,44 +74,37 @@ RadioRouter.get("/all", (req, res) => {
 RadioRouter.put("/mark", (req, res) => {
   const { id, newIsDone } = req.body;
 
-  const todo = todos.find((item) => item.id == id);
+  const radio = radios.find((item) => item.id == id);
 
   // setzt das zuvor definierte todo auf den neuen isDone WErt
-  todo.isDone = newIsDone;
+  radio.isDone = newIsDone;
 
   // Todo rauslöschen
-  const newTodos = todos.filter((item) => item.id != id);
+  const newRadios = radios.filter((item) => item.id != id);
 
   // Geupdatete Todo wieder hinzufügen
-  newTodos.push(todo);
+  newRadios.push(radio);
 
-  todos = newTodos;
+  radios = newRadios;
 
-  res.status(StatusCodes.OK).json({ updatedTodo: todo });
+  res.status(StatusCodes.OK).json({ updatedRadio: radio });
 });
 
-RadioRouter.put("/update", (req, res) => {
-  const { todoId, newTask, newIsDone, newDueDate } = req.body;
+// RadioRouter.put("/update", (req, res) => {
+//   const { id, newTask, newIsDone, newDueDate } = req.body;
 
-  const todo = todos.find((todo) => todo.id == todoId);
+//   const radio = radios.find((radioSender) => radios.id == id);
 
-  // wir überschreiben bestimmte Werte des Todos
-  todo.task = newTask;
-  todo.isDone = newIsDone;
-  todo.dueDate = new Date(newDueDate);
+//    -----wir überschreiben bestimmte Werte des Todos-----
+//   todo.task = newTask;
+//   todo.isDone = newIsDone;
+//   todo.dueDate = new Date(newDueDate);
 
-  // // Todo rauslöschen
-  // const newTodos = todos.filter((todo) => todo.id != todoId);
+ 
+//   console.log(todos);
 
-  // // Geupdatete Todo wieder hinzufügen
-  // newTodos.push(todo);
-
-  // todos = newTodos;
-
-  console.log(todos);
-
-  res.status(StatusCodes.OK).json({ updatedTodo: todo });
-});
+//   res.status(StatusCodes.OK).json({ updatedTodo: todo });
+// });
 
 // POST REQUESTS
 RadioRouter.post("/create", async (req, res) => {
