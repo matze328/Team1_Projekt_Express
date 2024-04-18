@@ -10,7 +10,7 @@ let radios = [
     id: 1,
     userId: 1,
     radioSender: "Last FM",
-    isDone : true,
+    isDone: true,
   },
   {
     id: 2,
@@ -100,7 +100,7 @@ RadioRouter.put("/mark", (req, res) => {
 //   todo.isDone = newIsDone;
 //   todo.dueDate = new Date(newDueDate);
 
- 
+
 //   console.log(todos);
 
 //   res.status(StatusCodes.OK).json({ updatedTodo: todo });
@@ -108,32 +108,33 @@ RadioRouter.put("/mark", (req, res) => {
 
 // POST REQUESTS
 RadioRouter.post("/create", async (req, res) => {
-  const { newTask, newIsDone, newDueDate, newUserId } = req.body;
+  const { newRadiosender, newIsDone, newId, newUserId } = req.body;
 
-  const newTodo = {
-    task: newTask,
-    isDone: newIsDone,
-    dueDate: new Date(newDueDate),
+  const newRadio = {
+    // id: newId,
     userId: newUserId,
+    radioSender: newRadiosender,
+    isDone: newIsDone,
+
   };
 
-  const todo = await RadioModel.create(newTodo);
+  const radio = await RadioModel.create(newRadio);
 
-  // todos.push(newTodo);
+  // radios.push(newRadio);
 
-  res.status(StatusCodes.OK).json({ todo });
+  res.status(StatusCodes.OK).json({ radio: radio });
 });
 
 // DELETE REQUEST
 RadioRouter.delete("/delete", (req, res) => {
-  const { todoId } = req.body; //req.body.todoId
+  const { id } = req.body; //req.body.todoId
 
   console.log("MY BODY", req.body);
-  const newTodosArray = todos.filter((item) => item.id != todoId);
+  const newRadiosArray = radios.filter((item) => item.id != id);
 
-  console.log("NEW TODOS", newTodosArray);
-  todos = newTodosArray;
-  res.status(StatusCodes.OK).json({ deletedTodosId: todoId });
+  console.log("NEW TODOS", newRadiosArray);
+  radios = newRadiosArray;
+  res.status(StatusCodes.OK).json({ deletedid: id });
 });
 
 module.exports = { RadioRouter };

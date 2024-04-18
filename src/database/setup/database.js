@@ -1,7 +1,6 @@
 const { Sequelize } = require("sequelize");
 
 // Connect to MySQL using Sequelize
-const radioSequelize = new Sequelize("radio_app", "root", "root1234", {
   host: "localhost",
   dialect: "mysql",
 });
