@@ -64,24 +64,22 @@ UserRouter.get("/profile/byid", (req, res) => {
 
 //  ***PUT REQUESTS***
 UserRouter.put("/profile/update", (req, res) => {
-  // req.body = {
-  //   userId: 2,
-  //   username: "Franz",
-  // };
 
-  // const username = req.body.username;
-  // const userId = req.body.userId;
 
   // wir holen Input aus dem Request heraus
-  const { userName, userId } = req.body;
+  const { userName, userId, vorName, nachName, email, password } = req.body;
 
-  if (!userId || !userName) {
+  if (!userId || !userName || !vorName|| !nachName|| !email|| !password) {
     res.status(StatusCodes.BAD_REQUEST).send("userID oder username fehlt");
   } else {
     // finde das Profil mit passender ID
     const currentUser = profiles.find((item) => item.id === userId);
     // aktualisiere Profil-username
     currentUser.userName = userName;
+    currentUser.vorName = vorName;
+    currentUser.nachName = nachName;
+    currentUser.email = email;
+    currentUser.password = password;
 
     // hole alle anderen Profile aus der Datenbank
     const newProfiles = profiles.filter((item) => item.id !== userId);

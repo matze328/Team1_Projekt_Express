@@ -9,12 +9,13 @@ const UserModel = radioSequelize.define(
       primaryKey: true,
       type: DataTypes.INTEGER,
       allowNull: false,
+      autoIncrement: true,
     },
-    vorname: {
+    vorName: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    nachname: {
+    nachName: {
       type: DataTypes.STRING,
       allowNull: false,
     },
