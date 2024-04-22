@@ -1,5 +1,7 @@
 const { Router } = require("express");
 const { StatusCodes } = require("http-status-codes");
+const UserModel = require("../../database/models/User/UserModel")
+const radioSequelize = require("../../database/setup/database");
 
 const AuthRouter = Router();
 
@@ -15,14 +17,14 @@ AuthRouter.get("/login", async(req, res) => {
   if (user.password !== password) {
     return res.status(StatusCodes.UNAUTHORIZED).send("email oder password falsch");
   }
-  res.status(StatusCodes.OK).send("User Login erfolgreich");
+  res.status(StatusCodes.OK).json({user});
 });
 
 AuthRouter.post("/signup", async(req, res) => {
   const { newUserName, newUserId, newVorName, newNachName, newEmail, newPassword } = req.body;
   const newProfile = {
     userName: newUserName,
-    // userId: newUserId,
+    //  userId: newUserId,
     vorName: newVorName,
     nachName: newNachName,
     email: newEmail,

@@ -3,8 +3,8 @@ const radioSequelize = require("../../setup/database");
 
 // Define the Todo model
 const UserModel = radioSequelize.define(
-  "Profiles",
-  {
+  "Profile",
+  { 
     userId: {
       primaryKey: true,
       type: DataTypes.INTEGER,
@@ -28,7 +28,7 @@ const UserModel = radioSequelize.define(
       allowNull: false,
     },
   },
-  { tableName: "User Profiles" }
+  { tableName: "UserProfiles" }
 );
 
 module.exports = UserModel;

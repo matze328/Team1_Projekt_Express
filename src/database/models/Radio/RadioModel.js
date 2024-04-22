@@ -10,24 +10,19 @@ const RadioModel = radioSequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
       autoIncrement: true,
-
     },
     userId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
-
+      allowNull: true,
     },
     radioSender: {
       type: DataTypes.STRING,
       allowNull: false,
-
-
     },
     isDone: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
       defaultValue: false,
-
     },
   },
   { tableName: "RadioSender" }

@@ -1,93 +1,62 @@
 const { Router } = require("express");
 const { StatusCodes, ReasonPhrases } = require("http-status-codes");
 const radioSequelize = require("../../database/setup/database");
-const RadioModel = require("../../database/models/Radio/RadioModel");
+const  RadioModel  = require("../../database/models/Radio/RadioModel");
 
 const RadioRouter = Router();
 
-let radios = [
-  {
-    id: 1,
-    userId: 1,
-    radioSender: "Last FM",
-    isDone: true,
-  },
-  {
-    id: 2,
-    userId: 1,
-    radioSender: "Sunshine Live",
-    isDone: true,
-  },
-  {
-    id: 3,
-    userId: 2,
-    radioSender: "1 Live",
-    isDone: true,
-  },
-  {
-    id: 4,
-    userId: 2,
-    radioSender: "Radio 91,10",
-    isDone: true,
-  },
-];
+
 
 // GET REQUESTS
 // /v1/todos/bytodoid
-RadioRouter.get("/byid", (req, res) => {
-  const radioId = req.query.id;
-  if (!radioId) {
+RadioRouter.get("/byid", async (req, res) => {
+  const id = parseInt(req.query.id);
+  if (!id) {
     res.status(StatusCodes.BAD_REQUEST).send(ReasonPhrases.BAD_REQUEST);
     return;
   }
-  const Radio = radios.find((item) => item.id == radioId);
-  // 1 == '1' --> true
-  // 1 === '1' --> false
-  res.status(StatusCodes.OK).json({ Radio: Radio });
-});
-
-// Alle Todos von einer UserId
-RadioRouter.get("/byuserid", (req, res) => {
-  // const userId = req.body.userId;
-  // const userId = parseInt(req.query.userId);
-  const userId = req.query.userId;
-  // console.log(userId);
-
-  if (!userId) {
-    res
-      .status(StatusCodes.BAD_REQUEST)
-      .send(ReasonPhrases.BAD_REQUEST + " Keine userID");
+  const RadioSender = await RadioModel.findOne({ where: { id: id } });
+  if (!RadioSender) {
+    res.status(StatusCodes.NOT_FOUND).send(ReasonPhrases.NOT_FOUND);
     return;
   }
 
-  const userRadio = radios.filter((item) => item.userId == userId);
+  res.status(StatusCodes.OK).json({ Radio: RadioSender });
+});
 
-  res.status(StatusCodes.OK).json(userRadio);
+// Alle Todos von einer UserId
+RadioRouter.get("/byuserid", async (req, res) => {
+  const userId = parseInt(req.query.userId);
+  if (!userId) {
+    res.status(StatusCodes.BAD_REQUEST).send(ReasonPhrases.BAD_REQUEST);
+    return;
+  }
+
+  const userFavorit = await RadioModel.findOne({ where: { userId: userId } });
+  if (!userFavorit) {
+    res.status(StatusCodes.NOT_FOUND).send(ReasonPhrases.NOT_FOUND);
+    return;
+  }
+  res.status(StatusCodes.OK).json( { userFavorit: userFavorit } );
   // res.status(StatusCodes.OK).send(JSON.stringify(userTodos)); //alternativ
 });
 
-RadioRouter.get("/all", (req, res) => {
-  res.status(StatusCodes.OK).send(radios);
+RadioRouter.get("/all", async (req, res) => {
+  const allRadiosender = await RadioModel.findAll();
+  res.status(StatusCodes.OK).json(allRadiosender);
 });
 
 // PUT REQUESTS
-RadioRouter.put("/mark", (req, res) => {
-  const { id, newIsDone } = req.body;
+RadioRouter.put("/mark", async (req, res) => {
+ try {
+  const  { id, newIsDone } = req.body;
 
-  const radio = radios.find((item) => item.id == id);
+  await RadioModel.update({ isDone: newIsDone }, { where: { id: id } });
 
-  // setzt das zuvor definierte todo auf den neuen isDone WErt
-  radio.isDone = newIsDone;
-
-  // Todo rauslöschen
-  const newRadios = radios.filter((item) => item.id != id);
-
-  // Geupdatete Todo wieder hinzufügen
-  newRadios.push(radio);
-
-  radios = newRadios;
-
-  res.status(StatusCodes.OK).json({ updatedRadio: radio });
+ res.status(StatusCodes.OK).json({ updatedRadioId: id });
+ } catch (e) {
+  res.status(StatusCodes.BAD_REQUEST).send(e);
+}
 });
 
 // RadioRouter.put("/update", (req, res) => {
@@ -126,15 +95,25 @@ RadioRouter.post("/create", async (req, res) => {
 });
 
 // DELETE REQUEST
-RadioRouter.delete("/delete", (req, res) => {
+RadioRouter.delete("/delete", async (req, res) => {
   const { id } = req.body; //req.body.todoId
 
-  console.log("MY BODY", req.body);
-  const newRadiosArray = radios.filter((item) => item.id != id);
+if (!id) {
+  res.status(StatusCodes.BAD_REQUEST).send("userID fehlt");
+  return;
+}
 
-  console.log("NEW TODOS", newRadiosArray);
-  radios = newRadiosArray;
-  res.status(StatusCodes.OK).json({ deletedid: id });
+const deletedProfile = await RadioModel.findOne({ where: { id: id } });
+
+if (!deletedProfile) {
+  res.status(StatusCodes.NOT_FOUND).send("Benutzerprofil nicht gefunden");
+  return;
+}
+
+await deletedProfile.destroy();
+
+res.status(StatusCodes.OK).json({ deletedUserId: id });
 });
+
 
 module.exports = { RadioRouter };
