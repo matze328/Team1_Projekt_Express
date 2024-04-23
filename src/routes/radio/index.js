@@ -59,23 +59,7 @@ RadioRouter.put("/mark", async (req, res) => {
 }
 });
 
-// RadioRouter.put("/update", (req, res) => {
-//   const { id, newTask, newIsDone, newDueDate } = req.body;
 
-//   const radio = radios.find((radioSender) => radios.id == id);
-
-//    -----wir überschreiben bestimmte Werte des Todos-----
-//   todo.task = newTask;
-//   todo.isDone = newIsDone;
-//   todo.dueDate = new Date(newDueDate);
-
-
-//   console.log(todos);
-
-//   res.status(StatusCodes.OK).json({ updatedTodo: todo });
-// });
-
-// POST REQUESTS
 RadioRouter.post("/create", async (req, res) => {
   const { newRadiosender, newIsDone, newId, newUserId } = req.body;
 
