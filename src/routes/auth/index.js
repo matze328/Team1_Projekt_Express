@@ -6,7 +6,7 @@ const radioSequelize = require("../../database/setup/database");
 const AuthRouter = Router();
 
 AuthRouter.get("/login", async(req, res) => {
-  const { email, password } = req.body;
+  const { email, password } = req.query;
 
   const user = await UserModel.findOne({ email });
 
@@ -14,6 +14,7 @@ AuthRouter.get("/login", async(req, res) => {
     res.status(StatusCodes.BAD_REQUEST).send("email oder password falsch");
 
   }
+  console.log("hallo",user)
   if (user.password !== password) {
     return res.status(StatusCodes.UNAUTHORIZED).send("email oder password falsch");
   }
@@ -24,7 +25,7 @@ AuthRouter.post("/signup", async(req, res) => {
   const { newUserName, newUserId, newVorName, newNachName, newEmail, newPassword } = req.body;
   const newProfile = {
     userName: newUserName,
-    //  userId: newUserId,
+    //  userId: newUserId, autoIncrement
     vorName: newVorName,
     nachName: newNachName,
     email: newEmail,
