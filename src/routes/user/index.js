@@ -2,20 +2,16 @@ const { Router } = require("express");
 const { StatusCodes, ReasonPhrases } = require("http-status-codes");
 const radioSequelize = require("../../database/setup/database");
 const UserModel = require("../../database/models/User/UserModel.js");
-// Datenbank simulieren
 
 const UserRouter = Router();
 
-
-
 //  ***GET REQUESTS***
-//Return all profiles
+
 UserRouter.get("/all", async (req, res) => {
   const allProfiles = await UserModel.findAll();
   res.status(StatusCodes.OK).json(allProfiles);
 });
 
-// Return profile from a specific user
 UserRouter.get("/byid", async (req, res) => {
   const userId = parseInt(req.query.userId);
   if (!userId) {
@@ -31,6 +27,7 @@ UserRouter.get("/byid", async (req, res) => {
 
   res.status(StatusCodes.OK).json({ profile: userProfile });
 });
+
 //  ***PUT REQUESTS***
 UserRouter.put("/update", async (req, res) => {
   const { userName, userId, vorName, nachName, email, password } = req.body;

@@ -5,6 +5,7 @@ const radioSequelize = require("../../database/setup/database");
 
 const AuthRouter = Router();
 
+//  ***GET REQUESTS***
 AuthRouter.get("/login", async(req, res) => {
   const { email, password } = req.query;
 
@@ -21,11 +22,12 @@ AuthRouter.get("/login", async(req, res) => {
   res.status(StatusCodes.OK).json({user});
 });
 
+//  ***POST REQUESTS***
+
 AuthRouter.post("/signup", async(req, res) => {
-  const { newUserName, newUserId, newVorName, newNachName, newEmail, newPassword } = req.body;
+  const { newUserName, newVorName, newNachName, newEmail, newPassword } = req.body;
   const newProfile = {
     userName: newUserName,
-    //  userId: newUserId, autoIncrement
     vorName: newVorName,
     nachName: newNachName,
     email: newEmail,
@@ -37,6 +39,7 @@ AuthRouter.post("/signup", async(req, res) => {
   res.status(StatusCodes.OK).json({ profile: profile });
 });
 
+//  ***DELETE REQUESTS***
 AuthRouter.delete("/logout", async (req, res) => {
   if (req.session) {
    

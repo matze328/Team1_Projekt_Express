@@ -7,8 +7,7 @@ const RadioRouter = Router();
 
 
 
-// GET REQUESTS
-// /v1/todos/bytodoid
+//  ***GET REQUESTS***
 RadioRouter.get("/byid", async (req, res) => {
   const id = parseInt(req.query.id);
   if (!id) {
@@ -24,7 +23,6 @@ RadioRouter.get("/byid", async (req, res) => {
   res.status(StatusCodes.OK).json({ Radio: RadioSender });
 });
 
-// Alle Todos von einer UserId
 RadioRouter.get("/byuserid", async (req, res) => {
   const userId = parseInt(req.query.userId);
   if (!userId) {
@@ -38,7 +36,7 @@ RadioRouter.get("/byuserid", async (req, res) => {
     return;
   }
   res.status(StatusCodes.OK).json( { userFavorit: userFavorit } );
-  // res.status(StatusCodes.OK).send(JSON.stringify(userTodos)); //alternativ
+  
 });
 
 RadioRouter.get("/all", async (req, res) => {
@@ -46,7 +44,7 @@ RadioRouter.get("/all", async (req, res) => {
   res.status(StatusCodes.OK).json(allRadiosender);
 });
 
-// PUT REQUESTS
+//  ***PUT REQUESTS***
 RadioRouter.put("/mark", async (req, res) => {
  try {
   const  { id, newIsDone } = req.body;
@@ -59,12 +57,12 @@ RadioRouter.put("/mark", async (req, res) => {
 }
 });
 
+//  ***POST REQUESTS***
 
 RadioRouter.post("/create", async (req, res) => {
-  const { newRadiosender, newIsDone, newId, newUserId } = req.body;
+  const { newRadiosender, newIsDone, newUserId } = req.body;
 
   const newRadio = {
-    // id: newId,
     userId: newUserId,
     radioSender: newRadiosender,
     isDone: newIsDone,
@@ -73,15 +71,13 @@ RadioRouter.post("/create", async (req, res) => {
 
   const radio = await RadioModel.create(newRadio);
 
-  // radios.push(newRadio);
 
   res.status(StatusCodes.OK).json({ radio: radio });
 });
 
-// DELETE REQUEST
+//  ***DELETE REQUESTS***
 RadioRouter.delete("/delete", async (req, res) => {
-  const { id } = req.body; //req.body.todoId
-
+  const { id } = req.body; 
 if (!id) {
   res.status(StatusCodes.BAD_REQUEST).send("userID fehlt");
   return;
