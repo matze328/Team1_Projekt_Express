@@ -4,3 +4,5 @@ NODE_ENV=testing
 node_modules
 .env
 database.js
+error.log
+combined.log

@@ -2,6 +2,7 @@ const { Router } = require("express");
 const { AuthRouter } = require("./auth");
 const { UserRouter } = require("./user");
 const { RadioRouter } = require("./radio");
+const logger = require("../services/logger/logger");
 
 const AppRouter = Router();
 

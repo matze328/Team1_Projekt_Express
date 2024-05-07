@@ -3,6 +3,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const { AppRouter } = require("./src/routes");
 const radioSequelize = require("./src/database/setup/database");
+const logger = require('./src/services/logger/logger'); // Passe den Pfad entsprechend an
 
 const PORT = process.env.PORT;
 
@@ -21,6 +22,12 @@ radioSequelize
   });
 
 app.use("/v1", AppRouter);
+
+app.use((req, res, next) => {
+  logger.debug(`${req.method} ${req.url}`);
+  next();
+});
+
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`);
