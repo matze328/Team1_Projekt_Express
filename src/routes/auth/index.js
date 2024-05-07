@@ -2,6 +2,7 @@ const { Router } = require("express");
 const { StatusCodes } = require("http-status-codes");
 const UserModel = require("../../database/models/User/UserModel")
 const radioSequelize = require("../../database/setup/database");
+const { createAccessToken } = require("../../services/auth/AccessToken");
 
 const AuthRouter = Router();
 
@@ -15,11 +16,11 @@ AuthRouter.get("/login", async(req, res) => {
     res.status(StatusCodes.BAD_REQUEST).send("email oder password falsch");
 
   }
-  console.log("hallo",user)
   if (user.password !== password) {
     return res.status(StatusCodes.UNAUTHORIZED).send("email oder password falsch");
   }
-  res.status(StatusCodes.OK).json({user});
+  const accessToken = createAccessToken(user.userId);
+  res.json({ accessToken });
 });
 
 //  ***POST REQUESTS***
@@ -35,8 +36,11 @@ AuthRouter.post("/signup", async(req, res) => {
   };
 
   const profile = await UserModel.create(newProfile);
+  
+  const accessToken = createAccessToken(profile.userId);
+  res.json({ accessToken });
 
-  res.status(StatusCodes.OK).json({ profile: profile });
+
 });
 
 //  ***DELETE REQUESTS***
@@ -48,6 +52,7 @@ AuthRouter.delete("/logout", async (req, res) => {
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send("Logout fehlgeschlagen");
       }
       res.clearCookie("sessionID");
+
       res.status(StatusCodes.OK).send("Logout erfolgreich");
     });
   } else {
