@@ -12,8 +12,8 @@ UserRouter.get("/all", async (req, res) => {
   res.status(StatusCodes.OK).json(allProfiles);
 });
 
-UserRouter.get("/byid", async (req, res) => {
-  const userId = parseInt(req.query.userId);
+UserRouter.get("/currrentuser", async (req, res) => {
+  const userId = parseInt(req.userId);
   if (!userId) {
     res.status(StatusCodes.BAD_REQUEST).send(ReasonPhrases.BAD_REQUEST);
     return;

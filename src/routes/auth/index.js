@@ -10,7 +10,9 @@ const AuthRouter = Router();
 AuthRouter.get("/login", async(req, res) => {
   const { email, password } = req.query;
 
-  const user = await UserModel.findOne({ email });
+  const user = await UserModel.findOne({where:{
+     email: email} 
+    });
 
   if (!user) {
     res.status(StatusCodes.BAD_REQUEST).send("email oder password falsch");
