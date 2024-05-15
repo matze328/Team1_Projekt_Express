@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const { AppRouter } = require("./src/routes");
 const radioSequelize = require("./src/database/setup/database");
 const logger = require('./src/services/logger/logger'); // Passe den Pfad entsprechend an
+const ServerlessHttp = require("serverless-http");
 
 const PORT = process.env.PORT;
 
@@ -29,6 +30,7 @@ app.use((req, res, next) => {
 });
 
 
-app.listen(PORT, () => {
-  console.log(`Example app listening on port ${PORT}`);
-});
+// app.listen(PORT, () => {
+//   console.log(`Example app listening on port ${PORT}`);
+// });
+module.exports.handler = ServerlessHttp(app);
