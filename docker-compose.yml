@@ -1,0 +1,37 @@
+version: "3.8"
+
+services:
+  db:
+    image: mysql:8
+    environment:
+      - MYSQL_ROOT_PASSWORD=root1234
+      - MYSQL_DATABASE=radio_app
+    ports:
+      - 3312:3306
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - mysql_data:/var/lib/mysql # Persist data
+  api-app:
+    restart: on-failure
+    build: .
+    ports:
+      - 5050:5050
+    environment:
+      - PORT=5050
+      - DB_USERNAME=root
+      - DB_PASSWORD=root1234
+      - DB_NAME=radio_app
+      - NODE_ENV=dev
+      - JWT_SECRET=mysecret
+      - LOG_LEVEL=debug
+      - DB_HOST=db
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  mysql_data:
