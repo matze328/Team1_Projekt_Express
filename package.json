@@ -6,8 +6,10 @@
     "scripts": {
         "test": "DOTENV_CONFIG_PATH=.test.env jest",
         "dev": "nodemon -r dotenv/config index.js ",
-        "testrun": "nodemon -r dotenv/config index.js dotenv_config_path=.test.env "
-    },
+        "testrun": "nodemon -r dotenv/config index.js dotenv_config_path=.test.env ",
+        "prettier": "prettier --check .",
+        "prettier:fix": "prettier --write ."
+},
     "jest": {
         "setupFiles": [
             "dotenv/config",
@@ -26,7 +28,8 @@
         "jsonwebtoken": "^9.0.2",
         "mysql2": "^3.9.1",
         "sequelize": "^6.37.1",
-        "winston": "^3.13.0"
+        "winston": "^3.13.0",
+        "prettier": "^3.3.2"
     },
     "devDependencies": {
         "@types/jest": "^29.5.12",
