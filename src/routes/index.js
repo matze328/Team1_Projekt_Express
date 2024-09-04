@@ -10,5 +10,6 @@ const AppRouter = Router();
 AppRouter.use("/auth", AuthRouter);
 AppRouter.use("/user", authMiddleWare, UserRouter);
 AppRouter.use("/radio", RadioRouter);
+AppRouter.use("/song", SongRouter);
 
 module.exports = { AppRouter };
