@@ -8,7 +8,7 @@ SongRouter.post('/upload', (req, res) => {
     const { file } = req; // Angenommen, du verwendest Middleware wie multer zum Hochladen von Dateien
 
     const params = {
-        Bucket: 'my-music-app-bucket',
+        Bucket: 'music-app-bucket',
         Key: file.originalname,
         Body: file.buffer,
         ContentType: 'audio/mpeg'
