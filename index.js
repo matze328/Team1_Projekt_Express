@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const { AppRouter } = require("./src/routes");
-const {radioSequelize,dynamoDb } = require("./src/database/setup/database");
+const {radioSequelize } = require("./src/database/setup/database");
 const logger = require('./src/services/logger/logger'); // Passe den Pfad entsprechend an
 
 const PORT = process.env.PORT;
@@ -20,7 +20,7 @@ radioSequelize
   .catch((e) => {
     console.log(e);
   });
-  const dynamoDb = new AWS.DynamoDB.DocumentClient();
+  
 app.use("/v1", AppRouter);
 
 app.use((req, res, next) => {
