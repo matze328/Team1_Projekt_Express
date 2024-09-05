@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const { StatusCodes } = require("http-status-codes");
-const dynamoDb = require("../../database/setup/database");
+const { DynamoDB } = require("aws-sdk");
 
 const SongRouter = Router();
 
@@ -16,7 +16,7 @@ SongRouter.post('/upload', (req, res) => {
 
     s3.upload(params, (err, data) => {
         if (err) {
-            return res.status(500).send(err);
+            return res.status(StatusCodes.BAD_GATEWAY).send(err);
         }
 
         // Speichere Metadaten in DynamoDB
@@ -34,11 +34,11 @@ SongRouter.post('/upload', (req, res) => {
             Item: songData
         };
 
-        dynamoDB.put(dbParams, (dbErr) => {
+        DynamoDB.put(dbParams, (dbErr) => {
             if (dbErr) {
-                return res.status(500).send(dbErr);
+                return res.status(StatusCodes.BAD_REQUEST).send(dbErr);
             }
-            res.status(200).send('File uploaded and metadata saved successfully!');
+            res.status(StatusCodes.OK).send('File uploaded and metadata saved successfully!');
         });
     });
 });

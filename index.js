@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const { AppRouter } = require("./src/routes");
-const {radioSequelize } = require("./src/database/setup/database");
+const radioSequelize  = require("./src/database/setup/database");
 const logger = require('./src/services/logger/logger'); // Passe den Pfad entsprechend an
 
 const PORT = process.env.PORT;
