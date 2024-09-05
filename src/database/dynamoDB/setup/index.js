@@ -9,3 +9,5 @@ const s3 = new AWS.S3({
 
 // Konfiguration des DynamoDB-Clients
 const dynamoDB = new AWS.DynamoDB.DocumentClient();
+
+module.exports = dynamoDB;

@@ -1,10 +1,11 @@
 const { Router } = require("express");
 const { StatusCodes } = require("http-status-codes");
 const { DynamoDB } = require("aws-sdk");
+const dynamoDB = require("../../database/dynamoDB/setup");
 
 const SongRouter = Router();
 
-SongRouter.post('/upload', (req, res) => {
+SongRouter.post('/upload', async (req, res) => {
     const { file } = req; // Angenommen, du verwendest Middleware wie multer zum Hochladen von Dateien
 
     const params = {
@@ -14,7 +15,7 @@ SongRouter.post('/upload', (req, res) => {
         ContentType: 'audio/mpeg'
     };
 
-    s3.upload(params, (err, data) => {
+    await s3.upload(params, (err, data) => {
         if (err) {
             return res.status(StatusCodes.BAD_GATEWAY).send(err);
         }
@@ -42,7 +43,20 @@ SongRouter.post('/upload', (req, res) => {
         });
     });
 });
+SongRouter.get("/all", async (SongID) => {
+    const params = {
+        TableName: "Songs",
+        Key: { SongID }, // Ersetze 'id' durch den Primärschlüssel deiner Tabelle
+    };
 
+    try {
+        const result = await dynamoDB.get(params).promise();
+        console.log("Eintrag gefunden:", result.Item);
+        return result.Item;
+    } catch (error) {
+        console.error("Fehler beim Abrufen des Eintrags:", error);
+    }
+});
 
 
 module.exports = { SongRouter };
