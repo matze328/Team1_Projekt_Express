@@ -5,56 +5,54 @@ const dynamoDB = require("../../database/dynamoDB/setup");
 
 const SongRouter = Router();
 
-SongRouter.post('/upload', async (req, res) => {
-    const { file } = req; // Angenommen, du verwendest Middleware wie multer zum Hochladen von Dateien
-
-    const params = {
-        Bucket: 'music-app-bucket',
-        Key: file.originalname,
-        Body: file.buffer,
-        ContentType: 'audio/mpeg'
-    };
-
-    await s3.upload(params, (err, data) => {
-        if (err) {
-            return res.status(StatusCodes.BAD_GATEWAY).send(err);
-        }
-
-        // Speichere Metadaten in DynamoDB
-        const songData = {
-            SongID: file.originalname, // oder eine generierte ID
-            Title: req.body.title,
-            Artist: req.body.artist,
-            Album: req.body.album,
-            Genre: req.body.genre,
-            S3Path: data.Location 
-        };
-
-        const dbParams = {
-            TableName: 'Songs',
-            Item: songData
-        };
-
-        DynamoDB.put(dbParams, (dbErr) => {
-            if (dbErr) {
-                return res.status(StatusCodes.BAD_REQUEST).send(dbErr);
-            }
-            res.status(StatusCodes.OK).send('File uploaded and metadata saved successfully!');
-        });
-    });
-});
-SongRouter.get("/all", async (SongID) => {
+// Route für alle MP3-Songs
+SongRouter.get("/all", async (req, res) => {
     const params = {
         TableName: "Songs",
-        Key: { SongID }, // Ersetze 'id' durch den Primärschlüssel deiner Tabelle
+        FilterExpression: "contains(FileType, :mp3)", // Filtert nach MP3-Dateien
+        ExpressionAttributeValues: {
+            ":mp3": "mp3"
+        }
+    };
+
+    try {
+        const result = await dynamoDB.scan(params).promise(); 
+        console.log("Alle MP3-Songs gefunden:", result.Items);
+        return res.status(200).json(result.Items); 
+    } catch (error) {
+        console.error("Fehler beim Abrufen der Songs:", error);
+        return res.status(500).json({ message: "Interner Serverfehler" }); 
+    }
+});
+
+// Route für einen bestimmten Song anhand der SongID
+SongRouter.get("/songid", async (req, res) => {
+    const songId = req.params.songId; // SongID aus den URL-Parametern abrufen
+    const params = {
+        TableName: "Songs",
+        Key: { SongID: songId }, 
     };
 
     try {
         const result = await dynamoDB.get(params).promise();
-        console.log("Eintrag gefunden:", result.Item);
-        return result.Item;
+
+        if (result.Item) {
+            console.log("Eintrag gefunden:", result.Item);
+            return res.status(200).json(result.Item); 
+        } else {
+            console.log("Kein Eintrag gefunden für SongID:", songId);
+            return res.status(404).json({ message: "Song nicht gefunden" }); 
+        }
     } catch (error) {
         console.error("Fehler beim Abrufen des Eintrags:", error);
+
+        if (error.code === 'ResourceNotFoundException') {
+            return res.status(404).json({ message: "Tabelle nicht gefunden" });
+        } else if (error.code === 'ValidationException') {
+            return res.status(400).json({ message: "Ungültige Anfrage" });
+        } else {
+            return res.status(500).json({ message: "Interner Serverfehler" }); 
+        }
     }
 });
 
