@@ -11,7 +11,7 @@ SongRouter.get("/all", async (req, res) => {
         TableName: "Songs",
         FilterExpression: "contains(FileType, :mp3)", // Filtert nach MP3-Dateien
         ExpressionAttributeValues: {
-            ":mp3": "mp3"
+            ":m4p": "m4p"
         }
     };
 
