@@ -8,20 +8,16 @@ const SongRouter = Router();
 // Route für alle m4p-Songs
 SongRouter.get('/all', async (req, res) => {
   const params = {
-    TableName: 'Songs',
-    FilterExpression: 'contains(FileType, :m4p)', // Filtert nach MP3-Dateien
-    ExpressionAttributeValues: {
-      ':m4p': 'm4p',
-    },
+      TableName: 'Songs',
   };
 
   try {
-    const result = await dynamoDB.scan(params).promise();
-    console.log('Alle m4p-Songs gefunden:', result.Items);
-    return res.status(200).json(result.Items);
+      const result = await dynamoDB.scan(params).promise();
+      console.log('Alle Songs gefunden:', result.Items);
+      return res.status(200).json(result.Items);
   } catch (error) {
-    console.error('Fehler beim Abrufen der Songs:', error);
-    return res.status(500).json({ message: 'Interner Serverfehler' });
+      console.error('Fehler beim Abrufen der Songs:', error);
+      return res.status(500).json({ message: 'Interner Serverfehler' });
   }
 });
 
