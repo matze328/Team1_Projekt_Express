@@ -76,7 +76,7 @@ SongRouter.get('/songs/:artist/:album', async (req, res) => {
 
         if (result.Items.length > 0) {
             console.log(`Songs für ${album} von ${artist} gefunden:`, result.Items);
-            return res.status(200).json(result.Items.map(item => item.SongID)); // Hier kannst du auch andere Felder zurückgeben
+            return res.status(200).json(result.Items.map(item => item)); // Hier kannst du auch andere Felder zurückgeben
         } else {
             console.log(`Keine Songs gefunden für ${album} von ${artist}`);
             return res.status(404).json({ message: 'Keine Songs gefunden' });
